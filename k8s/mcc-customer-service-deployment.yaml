@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcc-customer-service
+  namespace: stech
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcc-customer-service
+  template:
+    metadata:
+      labels:
+        app: mcc-customer-service
+    spec:
+      containers:
+        - name: mcc-customer-service
+          image: ingalain/mcc-customer:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mcc-secrets
+                  key: DB_HOST
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mcc-secrets
+                  key: DB_NAME
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mcc-secrets
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcc-secrets
+                  key: DB_PASSWORD
+            - name: SERVICE_BUS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: mcc-secrets
+                  key: SERVICE_BUS_CONNECTION_STRING
