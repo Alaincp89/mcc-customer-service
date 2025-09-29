@@ -1,0 +1,18 @@
+name: SonarQube analysis
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Analyze with SonaQube
+        uses: SonarSource/sonarqube-scan-actions@v2.0.1
+        env:
+          SONAR_TOKEN: ${{ secret.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+
