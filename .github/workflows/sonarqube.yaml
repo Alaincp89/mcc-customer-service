@@ -17,8 +17,11 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Install Maven
+        run: sudo apt-get update && sudo apt-get install -y maven
+
       - name: Run tests
-        run: ./mvnw -B -DskipTests=false test
+        run: mvn -B -DskipTests=false test
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2.0.1
