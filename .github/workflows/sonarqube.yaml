@@ -23,9 +23,22 @@ jobs:
       - name: Run tests
         run: mvn -B -DskipTests=false test
 
+      - name: Debug SonarQube variables
+        run: |
+          echo "SONAR_TOKEN is set: ${{ secrets.SONAR_TOKEN != '' }}"
+          echo "SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}"
+          echo "SONAR_HOST_URL is set: ${{ vars.SONAR_HOST_URL != '' }}"
+
       - name: SonarQube Scan
+        if: vars.SONAR_HOST_URL != '' && secrets.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@v2.0.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+
+      - name: Skip SonarQube Scan
+        if: vars.SONAR_HOST_URL == '' || secrets.SONAR_TOKEN == ''
+        run: |
+          echo "SonarQube scan skipped - missing SONAR_HOST_URL or SONAR_TOKEN"
+          echo "Please configure SONAR_HOST_URL (repository variable) and SONAR_TOKEN (repository secret)"
 
