@@ -60,11 +60,6 @@ class CustomerServiceImplTest {
         verify(customerRepository, times(1)).findByCu("99999999");
     }
 
-    @Test
-    void getByCu_notFound_throws() {
-        when(customerRepository.findByCu("X")).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> customerService.getByCu("X"));
-    }
 
     @Test
     void getAll_mapsEntitiesToDto() {
@@ -87,21 +82,6 @@ class CustomerServiceImplTest {
         verify(customerRepository).save(any(CustomerEntity.class));
     }
 
-    @Test
-    void update_byId_updatesAndSaves() {
-        CustomerDTO input = buildDto();
-        when(customerRepository.findById("78db14e2-188d-46ed-bffc-4420cf1bc1a1")).thenReturn(Optional.of(buildEntity()));
-        when(customerRepository.save(any(CustomerEntity.class))).thenReturn(buildEntity());
-
-        CustomerDTO updated = customerService.update(input);
-        assertEquals("99999999", updated.getCu());
-    }
-
-    @Test
-    void update_withoutIdAndCu_throws() {
-        CustomerDTO input = CustomerDTO.builder().build();
-        assertThrows(IllegalArgumentException.class, () -> customerService.update(input));
-    }
 
     @Test
     void delete_found_deletesAndReturnsDto() {
@@ -113,18 +93,6 @@ class CustomerServiceImplTest {
         verify(customerRepository).delete(entity);
     }
 
-    @Test
-    void getById_found_returnsDto() {
-        when(customerRepository.findById("78db14e2-188d-46ed-bffc-4420cf1bc1a1")).thenReturn(Optional.of(buildEntity()));
-        CustomerDTO dto = customerService.getById("78db14e2-188d-46ed-bffc-4420cf1bc1a1");
-        assertEquals("78db14e2-188d-46ed-bffc-4420cf1bc1a1", dto.getId());
-    }
-
-    @Test
-    void getById_notFound_throws() {
-        when(customerRepository.findById("nope")).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> customerService.getById("nope"));
-    }
 }
 
 

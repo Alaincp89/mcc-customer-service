@@ -1,17 +1,24 @@
 spring:
+  application:
+    name: mcc-customer-service
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
-    username: sa
-    password:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost:5432}/${DB_NAME:dbmcc_colin}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:root}
   jpa:
     show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: true;
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: false
 server:
-  port: 0
+  port: ${SERVER_PORT:8083}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
 
